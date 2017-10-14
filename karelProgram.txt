@@ -1,0 +1,9 @@
+class program {
+  program() {
+    move()
+    if(front-is-clear) {
+      move()
+    }
+    end()
+  }
+}
