@@ -5,6 +5,7 @@
 #   "Nutritious"
 # ------------------------------------------------------------
 import ply.lex as lex
+import sys
 
 # Lists of reserved stuff
 reserved = {
@@ -88,8 +89,9 @@ t_ignore = " \t"
 
 
 def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
+    print("Unrecognized symbol/word '%s'" % t.value[0])
     t.lexer.skip(1)
+    sys.exit()
 
 
 # Build the lexer
@@ -110,7 +112,7 @@ def create_tokens(karelProgramText):
         tok = lexer.token()
         if not tok:
             break
-        karelParsed.write(tok.value + ',')
+        karelParsed.write(str(tok.value) + ',')
         #karelErrors.write(str(tok.lineno) + ", " + str(tok.lexpos))
 
     karelParsed.close()

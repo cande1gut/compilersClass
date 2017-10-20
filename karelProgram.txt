@@ -1,9 +1,19 @@
 class program {
+  void funo() {
+    turnLeft()
+    turnLeft()
+    turnLeft()
+  }
+  void fdos() {
+    move()
+    move()
+    move()
+    funo()
+  }
   program() {
     move()
-    if(front-is-clear) {
-      move()
-    }
+    fdos()
+    move()
     end()
   }
 }

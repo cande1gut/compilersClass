@@ -10,8 +10,9 @@ karelParsedFile = ""
 counter = 0
 officialFunctions = {"move": 1000, "turnLeft": 2000,
                      "pickBeeper": 3000, "putBeeper": 4000, "end": 5000}
+customFunctions = {}
 errors = ""
-actual = 0
+actual = 2
 ci = [0] * 1000
 stack = []
 
@@ -38,8 +39,9 @@ def exigir(terminal):
     return False
 
 
-def mostrar_error():
-    sys.exit("Syntax error")
+def mostrar_error(error):
+    errors = "Expected " + error, "Received " + karelParsedFile[counter]
+    sys.exit(errors)
 
 
 def program():
@@ -48,14 +50,16 @@ def program():
             if (exigir("{")):
                 functions()
                 main_function()
+                print("\nSymbols table")
+                print(customFunctions)
                 if not(exigir("}")):
-                    mostrar_error()
+                    mostrar_error("}")
             else:
-                mostrar_error()
+                mostrar_error("{")
         else:
-            mostrar_error()
+            mostrar_error("program")
     else:
-        mostrar_error()
+        mostrar_error("class")
 
 
 def functions():
@@ -65,22 +69,25 @@ def functions():
 
 
 def function():
+    global ci, actual
     if(exigir("void")):
-        name_function()
+        define_customer_function()
         if(exigir("(")):
             if(exigir(")")):
                 if(exigir("{")):
                     body()
+                    ci[actual] = 200
+                    actual += 1
                     if not(exigir("}")):
-                        mostrar_error()
+                        mostrar_error("}")
                 else:
-                    mostrar_error()
+                    mostrar_error("{")
             else:
-                mostrar_error()
+                mostrar_error(")")
         else:
-            mostrar_error()
+            mostrar_error("(")
     else:
-        mostrar_error()
+        mostrar_error("void")
 
 
 def functions_prima():
@@ -91,20 +98,22 @@ def functions_prima():
 
 def main_function():
     if(exigir("program")):
+        ci[0] = 100
+        ci[1] = actual
         if(exigir("(")):
             if(exigir(")")):
                 if(exigir("{")):
                     body()
                     if not(exigir("}")):
-                        mostrar_error()
+                        mostrar_error("}")
                 else:
-                    mostrar_error()
+                    mostrar_error("{")
             else:
-                mostrar_error()
+                mostrar_error(")")
         else:
-            mostrar_error()
+            mostrar_error("(")
     else:
-        mostrar_error()
+        mostrar_error("program")
 
 
 def body():
@@ -116,6 +125,12 @@ def body_prima():
     if (verificar("if") or verificar("while") or verificar("iterate") or verificar("move") or verificar("turnLeft") or verificar("pickBeeper") or verificar("putBeeper") or verificar("end")):
         expression()
         body_prima()
+    elif ((len(karelParsedFile[counter]) > 2 and len(karelParsedFile[counter]) <= 11)):
+        if(karelParsedFile[counter] in customFunctions):
+            expression()
+            body_prima()
+        else:
+            mostrar_error("a declared custom function")
 
 
 def expression():
@@ -142,77 +157,111 @@ def if_expression():
                     stack.append(actual + 1)
                     actual += 2
                     body()
-                    ci[stack.pop()] = actual
                     if(exigir("}")):
                         else_expression()
                     else:
-                        mostrar_error()
+                        mostrar_error("}")
                 else:
-                    mostrar_error()
+                    mostrar_error("{")
             else:
-                mostrar_error()
+                mostrar_error(")")
         else:
-            mostrar_error()
+            mostrar_error("(")
 
 
 def else_expression():
-    if(verificar("else:")):
-        if(exigir("else:")):
+    global actual, ci, stack
+    if(verificar("else")):
+        ci[stack.pop()] = actual + 2
+        if(exigir("else")):
             if(exigir("{")):
+                ci[actual] = 100
+                stack.append(actual + 1)
+                actual += 2
                 body()
+                ci[stack.pop()] = actual
                 if not(exigir("}")):
-                    mostrar_error()
+                    mostrar_error("}")
             else:
-                mostrar_error()
+                mostrar_error("{")
         else:
-            mostrar_error()
+            mostrar_error("else")
+    else:
+        ci[stack.pop()] = actual
 
 
 def while_expression():
+    global actual, ci, stack
+    stack.append(actual)
+    ci[actual] = 6000
+    actual += 1
     if(exigir("while")):
         if(exigir("(")):
             condition()
             if(exigir(")")):
                 if(exigir("{")):
+                    ci[actual] = 100
+                    stack.append(actual + 1)
+                    actual += 2
                     body()
+                    ci[stack.pop()] = actual + 2
+                    ci[actual] = 100
+                    ci[actual + 1] = stack.pop()
+                    actual += 2
                     if not(exigir("}")):
-                        mostrar_error()
+                        mostrar_error("}")
                 else:
-                    mostrar_error()
+                    mostrar_error("{")
             else:
-                mostrar_error()
+                mostrar_error(")")
         else:
-            mostrar_error()
+            mostrar_error("(")
     else:
-        mostrar_error()
+        mostrar_error("while")
 
 
 def iterate_expression():
+    global actual, ci, stack
+    stack.append(actual)
+    ci[actual] = 6000
+    actual += 1
     if(exigir("iterate")):
         if(exigir("(")):
             number()
             if(exigir(")")):
                 if(exigir("{")):
+                    ci[actual] = 100
+                    stack.append(actual + 1)
+                    actual += 2
                     body()
+                    ci[stack.pop()] = actual + 2
+                    ci[actual] = 100
+                    ci[actual + 1] = stack.pop()
+                    actual += 2
                     if not(exigir("}")):
-                        mostrar_error()
+                        mostrar_error("}")
                 else:
-                    mostrar_error()
+                    mostrar_error("{")
             else:
-                mostrar_error()
+                mostrar_error(")")
         else:
-            mostrar_error()
+            mostrar_error("(")
     else:
-        mostrar_error()
+        mostrar_error("iterate")
 
 
 def number():
-    for i in range(1, 101):
-        if(i == 101):
-            mostrar_error()
-        if(verificar(i)):
-            exigir(i)
-            break
+    global ci, actual
+    number = karelParsedFile[counter]
+    try:
+        i = int(number)
+        if(i > 1 and i <= 100):
+            verificar(str(i))
+            exigir(str(i))
+        ci[actual] = i
+        actual += 1
+    except ValueError:
+        mostrar_error("valid number")
 
 
 def condition():
@@ -225,7 +274,7 @@ def condition():
                   "any-beepers-in-beeper-bag": 6017, "no-beepers-in-beeper-bag": 6018}
     for i in range(len(conditions)):
         if(i == len(conditions)):
-            mostrar_error()
+            mostrar_error("valid condition")
         if(verificar(conditions.keys()[i])):
             ci[actual] = conditions.values()[i]
             actual += 1
@@ -237,9 +286,9 @@ def call_function():
     name_function()
     if(exigir("(")):
         if not(exigir(")")):
-            mostrar_error()
+            mostrar_error(")")
     else:
-        mostrar_error()
+        mostrar_error("(")
 
 
 def name_function():
@@ -258,13 +307,27 @@ def official_function():
             exigir(officialFunctions.keys()[i])
             if(officialFunctions.keys()[i] == "end"):
                 for i in range(0, actual):
-                    print(ci[i])
+                    print(i, ci[i])
             break
 
 
-def customer_function():
+def define_customer_function():
+    global customFunctions, actual
     function = karelParsedFile[counter]
-    if(len(function) > 2 and len(function) <= 11):
+    if((len(function) > 2 and len(function) <= 11)):
         exigir(function)
+        customFunctions[function] = actual
     else:
-        mostrar_error()
+        mostrar_error("valid customer function name")
+
+
+def customer_function():
+    global ci, actual, customFunctions
+    function = karelParsedFile[counter]
+    if((len(function) > 2 and len(function) <= 11)):
+        exigir(function)
+        ci[actual] = 300
+        ci[actual + 1] = customFunctions.get(function)
+        actual += 2
+    else:
+        mostrar_error("valid customer function name")
