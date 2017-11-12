@@ -2,7 +2,7 @@
 # Equipo:
 #   Candelario Gutierrez
 #   Diego Vargas
-#   "Nutritious"
+#   "Nutritious Maincraters"
 # ------------------------------------------------------------
 import sys
 
@@ -327,6 +327,8 @@ def customer_function():
     if((len(function) > 2 and len(function) <= 11)):
         exigir(function)
         ci[actual] = 300
+        #aqui tenemos que cachar el error y es cuando customFunctions.get(function) regresa un None, o sea que no encontró nada
+        #mostrar_error("declared customer function name")
         ci[actual + 1] = customFunctions.get(function)
         actual += 2
     else:

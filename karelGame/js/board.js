@@ -11,11 +11,11 @@ var Board = function(columns, rows, table, karelPos, karelOr) {
       if (karelPos[0] == x && karelPos[1] == y) {
         var tile = new Tile(x, y, group, karelOr);
       } else {
+		//aqui ya resolvi el misterio, checa los coments en app.js
         var tile = new Tile(x, y, group, table[y][x]);
       }
       row.push(tile);
     }
-
     boardTiles.push(row);
   }
 

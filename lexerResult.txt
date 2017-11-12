@@ -1,1 +1,1 @@
-class,program,{,void,funo,(,),{,turnLeft,(,),turnLeft,(,),turnLeft,(,),},void,fdos,(,),{,move,(,),move,(,),move,(,),funo,(,),},program,(,),{,move,(,),fdos,(,),move,(,),end,(,),{,},
+class,program,{,void,funo,(,),{,turnLeft,(,),turnLeft,(,),turnLeft,(,),},void,fdos,(,),{,move,(,),move,(,),move,(,),funo,(,),},program,(,),{,move,(,),fdos,(,),move,(,),end,(,),},},
