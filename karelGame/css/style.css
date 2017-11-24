@@ -26,3 +26,36 @@ form {
 }
 
 #karel-board {}
+
+#karelBoard {
+  margin-bottom: 0 !important;
+  text-align: center;
+}
+
+#code {
+  resize: none;
+  height: 410px;
+  max-height: 410px;
+  overflow: auto;
+}
+
+#toast-container {
+  top: auto !important;
+  left: auto !important;
+  bottom: 10%;
+  right: 7%;
+}
+
+#velocity-img, #velocity-slider {
+  display: inline;
+}
+
+#velocity-img {
+  padding-top: 15px;
+  padding-left: 150px;
+}
+
+#velocity-slider-outer {
+  padding-left: 110px;
+  padding-right: 100px;
+}

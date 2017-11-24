@@ -89,7 +89,8 @@ t_ignore = " \t"
 
 
 def t_error(t):
-    print("Unrecognized symbol/word '%s'" % t.value[0])
+    print("Lexical-Error: Unrecognized symbol or word: %s %s, in line #%d" %
+          (" ", t.value[0], t.lexer.lineno))
     t.lexer.skip(1)
     sys.exit()
 
@@ -99,13 +100,11 @@ lexer = lex.lex()
 
 
 def create_tokens(karelProgramText):
-    karelProgram = open(karelProgramText).read()
-
     # Give the lexer some input
-    lexer.input(karelProgram)
+    lexer.input(karelProgramText)
 
     karelParsed = open("lexerResult.txt", "w")
-    karelErrors = open("lineNumbers.txt", "w")
+    #karelErrors = open("lineNumbers.txt", "w")
 
     # Tokenize
     while True:

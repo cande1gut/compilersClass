@@ -15,6 +15,7 @@ errors = ""
 actual = 2
 ci = [0] * 1000
 stack = []
+ciSocket = []
 
 
 def read_program(lexerResult):
@@ -23,6 +24,9 @@ def read_program(lexerResult):
     karelParsedFile = karelParsedFile.read().split(",")
     del karelParsedFile[-1]
     program()
+    for i in range(0, actual):
+        ciSocket.append(ci[i])
+    print(ciSocket)
 
 
 def verificar(terminal):
@@ -40,8 +44,9 @@ def exigir(terminal):
 
 
 def mostrar_error(error):
-    errors = "Expected " + error, "Received " + karelParsedFile[counter]
-    sys.exit(errors)
+    print("Syntactic-Error: Expected: %s,  received: %s" %
+          (error, karelParsedFile[counter]))
+    sys.exit()
 
 
 def program():
@@ -50,8 +55,8 @@ def program():
             if (exigir("{")):
                 functions()
                 main_function()
-                print("\nSymbols table")
-                print(customFunctions)
+                #print("\nSymbols table")
+                # print(customFunctions)
                 if not(exigir("}")):
                     mostrar_error("}")
             else:
@@ -299,15 +304,12 @@ def name_function():
 
 
 def official_function():
-    global actual, ci
+    global actual, ci, ciSocket
     for i in range(len(officialFunctions)):
         if(verificar(officialFunctions.keys()[i])):
             ci[actual] = officialFunctions.values()[i]
             actual += 1
             exigir(officialFunctions.keys()[i])
-            if(officialFunctions.keys()[i] == "end"):
-                for i in range(0, actual):
-                    print(i, ci[i])
             break
 
 
@@ -327,8 +329,7 @@ def customer_function():
     if((len(function) > 2 and len(function) <= 11)):
         exigir(function)
         ci[actual] = 300
-        #aqui tenemos que cachar el error y es cuando customFunctions.get(function) regresa un None, o sea que no encontró nada
-        #mostrar_error("declared customer function name")
+
         ci[actual + 1] = customFunctions.get(function)
         actual += 2
     else:

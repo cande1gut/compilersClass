@@ -1,5 +1,10 @@
+#!/usr/bin/python2.6
+import sys
+import json
 import lexicalAnalyzer as la
 import syntacticAnalyzer as sa
 
-la.create_tokens('karelProgram.txt')
+lines = sys.stdin.readlines()
+
+la.create_tokens(json.loads(lines[0]))
 sa.read_program('lexerResult.txt')

@@ -17,18 +17,66 @@
         <div class="row" id="first-inputs">
           <form class="col s12">
             <div class="row">
-              <b>Cargar tablero</b>
               <div class="col s12">
-                <input id="board-input" accept='text/plain' type="file" />
+                <div class="file-field input-field">
+                  <div class="btn">
+                    <span>Level</span>
+                    <input type="file" id="board-input">
+                  </div>
+                  <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                  </div>
+                </div>
+              </div>
+              <div class="col s12">
+                <div class="input-field col s12">
+                  <textarea id="code" class="materialize-textarea"></textarea>
+                  <label for="textarea1">Código</label>
+                </div>
+              </div>
+              <div class="col s12" id="buttons">
+                <a class="btn-large" id="ejecutar">Run</a>
+                <a class="btn-large" id="reiniciar">Restart</a>
               </div>
             </div>
           </form>
         </div>
       </div>
-      <div class="col s9" id="karel-board"></div>
+      <div class="col s9">
+        <div class="col s12">
+          <div class="row" id="karelBoard">
+            <div class="col s4">
+              <img src="assets/diamond.png">
+              <h5 id="beepers">0</h5>
+            </div>
+            <div class="col s4">
+              <img src="assets/loc.png">
+              <h5 id="loc">0</h5>
+            </div>
+            <div class="col s4">
+              <img src="assets/movements.png">
+              <h5 id="movements">0</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col s12" id="karel-board"></div>
+        <div class="col s12" id="bottom-panel">
+          <div class="col s1">
+            <img id="velocity-img" src="assets/velocity.png">
+          </div>
+          <div class="col s11">
+            <form action="#">
+              <p class="range-field" id="velocity-slider-outer">
+                <input type="range" id="velocity-slider" min="100" max="2000" value="500" step="100" />
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="js/jQuery.js"></script>
+    <script src="js/socket.io.js"></script>
     <script src="materialize/js/materialize.min.js"></script>
     <script src="js/phaser.min.js"></script>
     <script src="js/app.js"></script>

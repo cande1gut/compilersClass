@@ -12,8 +12,12 @@ class program {
   }
   program() {
     move()
-    fdos()
     move()
+    move()
+    move()
+    turnLeft()
+    move()
+    pickBeeper()
     end()
   }
 }
